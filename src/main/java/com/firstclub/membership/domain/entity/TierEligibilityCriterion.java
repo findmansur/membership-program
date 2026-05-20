@@ -12,6 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -25,6 +30,10 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "tier_eligibility_criteria")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class TierEligibilityCriterion {
 
     @Id
@@ -62,9 +71,6 @@ public class TierEligibilityCriterion {
     @Column(nullable = false)
     private boolean required = true;
 
-    protected TierEligibilityCriterion() {
-    }
-
     public TierEligibilityCriterion(CriteriaType type, BigDecimal threshold,
                                     String stringValue, Integer windowDays, boolean required) {
         this.type = type;
@@ -72,37 +78,5 @@ public class TierEligibilityCriterion {
         this.stringValue = stringValue;
         this.windowDays = windowDays;
         this.required = required;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public MembershipTier getTier() {
-        return tier;
-    }
-
-    public void setTier(MembershipTier tier) {
-        this.tier = tier;
-    }
-
-    public CriteriaType getType() {
-        return type;
-    }
-
-    public BigDecimal getThreshold() {
-        return threshold;
-    }
-
-    public String getStringValue() {
-        return stringValue;
-    }
-
-    public Integer getWindowDays() {
-        return windowDays;
-    }
-
-    public boolean isRequired() {
-        return required;
     }
 }

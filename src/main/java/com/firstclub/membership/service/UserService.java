@@ -33,4 +33,11 @@ public class UserService {
     public List<User> list() {
         return repository.findAll();
     }
+
+    @Transactional
+    public User updateCohort(Long userId, String cohort) {
+        User user = requireById(userId);
+        user.setCohort(cohort);
+        return repository.save(user);
+    }
 }

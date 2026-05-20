@@ -12,6 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
@@ -25,6 +29,9 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "subscription_events")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class SubscriptionEvent {
 
     @Id
@@ -51,9 +58,6 @@ public class SubscriptionEvent {
     @Column(name = "occurred_at", nullable = false)
     private Instant occurredAt;
 
-    protected SubscriptionEvent() {
-    }
-
     public SubscriptionEvent(Subscription subscription, SubscriptionEventType eventType,
                              String fromTier, String toTier, String note, Instant occurredAt) {
         this.subscription = subscription;
@@ -62,33 +66,5 @@ public class SubscriptionEvent {
         this.toTier = toTier;
         this.note = note;
         this.occurredAt = occurredAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Subscription getSubscription() {
-        return subscription;
-    }
-
-    public SubscriptionEventType getEventType() {
-        return eventType;
-    }
-
-    public String getFromTier() {
-        return fromTier;
-    }
-
-    public String getToTier() {
-        return toTier;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public Instant getOccurredAt() {
-        return occurredAt;
     }
 }

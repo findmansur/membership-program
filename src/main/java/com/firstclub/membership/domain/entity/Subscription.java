@@ -14,9 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
-import java.util.Objects;
 
 /**
  * A user's active or historical subscription to a plan + tier.
@@ -38,6 +43,11 @@ import java.util.Objects;
                 @Index(name = "idx_subs_user_status", columnList = "user_id, status")
         }
 )
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Subscription {
 
     @Id
@@ -72,9 +82,6 @@ public class Subscription {
     @Column(name = "version", nullable = false)
     private long version;
 
-    protected Subscription() {
-    }
-
     public Subscription(Long userId, MembershipPlan plan, MembershipTier tier,
                         Instant startAt, Instant endAt) {
         this.userId = userId;
@@ -83,66 +90,6 @@ public class Subscription {
         this.startAt = startAt;
         this.endAt = endAt;
         this.status = SubscriptionStatus.ACTIVE;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public MembershipPlan getPlan() {
-        return plan;
-    }
-
-    public void setPlan(MembershipPlan plan) {
-        this.plan = plan;
-    }
-
-    public MembershipTier getTier() {
-        return tier;
-    }
-
-    public void setTier(MembershipTier tier) {
-        this.tier = tier;
-    }
-
-    public SubscriptionStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(SubscriptionStatus status) {
-        this.status = status;
-    }
-
-    public Instant getStartAt() {
-        return startAt;
-    }
-
-    public void setStartAt(Instant startAt) {
-        this.startAt = startAt;
-    }
-
-    public Instant getEndAt() {
-        return endAt;
-    }
-
-    public void setEndAt(Instant endAt) {
-        this.endAt = endAt;
-    }
-
-    public boolean isAutoRenew() {
-        return autoRenew;
-    }
-
-    public void setAutoRenew(boolean autoRenew) {
-        this.autoRenew = autoRenew;
-    }
-
-    public long getVersion() {
-        return version;
     }
 
     /**
@@ -154,17 +101,5 @@ public class Subscription {
         return (status == SubscriptionStatus.ACTIVE || status == SubscriptionStatus.PENDING_CANCELLATION)
                 && !now.isBefore(startAt)
                 && now.isBefore(endAt);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Subscription that)) return false;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

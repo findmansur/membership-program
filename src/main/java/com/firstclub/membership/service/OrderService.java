@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -21,8 +22,13 @@ public class OrderService {
 
     @Transactional
     public OrderRecord create(CreateOrderRequest req) {
-        // Ensure user exists so we don't accumulate orders for ghost users.
         userService.requireById(req.userId());
         return repository.save(new OrderRecord(req.userId(), req.amount(), Instant.now()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderRecord> getUserOrders(Long userId) {
+        userService.requireById(userId);
+        return repository.findAllByUserIdOrderByCreatedAtDesc(userId);
     }
 }

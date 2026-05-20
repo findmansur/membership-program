@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -27,6 +31,9 @@ import java.time.Instant;
                 @Index(name = "idx_orders_user_created", columnList = "user_id, created_at")
         }
 )
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class OrderRecord {
 
     @Id
@@ -42,28 +49,9 @@ public class OrderRecord {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected OrderRecord() {
-    }
-
     public OrderRecord(Long userId, BigDecimal amount, Instant createdAt) {
         this.userId = userId;
         this.amount = amount;
         this.createdAt = createdAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
     }
 }

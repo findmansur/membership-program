@@ -12,6 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * A configured benefit attached to a tier.
@@ -24,6 +29,10 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "tier_benefits")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class TierBenefit {
 
     @Id
@@ -54,52 +63,9 @@ public class TierBenefit {
     @Column(length = 256)
     private String description;
 
-    protected TierBenefit() {
-    }
-
     public TierBenefit(BenefitType type, String configJson, String description) {
         this.type = type;
         this.configJson = configJson;
-        this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public MembershipTier getTier() {
-        return tier;
-    }
-
-    public void setTier(MembershipTier tier) {
-        this.tier = tier;
-    }
-
-    public BenefitType getType() {
-        return type;
-    }
-
-    public String getConfigJson() {
-        return configJson;
-    }
-
-    public void setConfigJson(String configJson) {
-        this.configJson = configJson;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
     }
 }

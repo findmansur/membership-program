@@ -10,9 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * A billing plan a user can subscribe to (e.g. Monthly@499, Yearly@4999).
@@ -26,6 +31,11 @@ import java.util.Objects;
         name = "membership_plans",
         uniqueConstraints = @UniqueConstraint(columnNames = "code")
 )
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class MembershipPlan {
 
     @Id
@@ -54,53 +64,10 @@ public class MembershipPlan {
     @Column(nullable = false)
     private boolean active = true;
 
-    protected MembershipPlan() {
-    }
-
     public MembershipPlan(String code, String name, BillingCycle billingCycle, BigDecimal basePrice) {
         this.code = code;
         this.name = name;
         this.billingCycle = billingCycle;
         this.basePrice = basePrice;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BillingCycle getBillingCycle() {
-        return billingCycle;
-    }
-
-    public BigDecimal getBasePrice() {
-        return basePrice;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MembershipPlan that)) return false;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

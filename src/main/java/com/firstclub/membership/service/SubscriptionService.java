@@ -210,11 +210,21 @@ public class SubscriptionService {
         });
     }
 
-    /**
-     * Invoked by the expiry scheduler. Idempotent — if a concurrent user
-     * action has already moved the subscription out of a current state, this
-     * method silently returns.
-     */
+    public Subscription toggleAutoRenew(Long subscriptionId, boolean autoRenew) {
+        Long userId = lookupUserId(subscriptionId);
+        return runLockedAndTransactional(userId, () -> {
+            Subscription sub = subscriptionRepository.findById(subscriptionId)
+                    .orElseThrow(() -> new NotFoundException("Subscription not found: " + subscriptionId));
+            if (sub.getStatus() != SubscriptionStatus.ACTIVE) {
+                throw new BadRequestException("Auto-renew can only be toggled on an ACTIVE subscription");
+            }
+            sub.setAutoRenew(autoRenew);
+            sub = subscriptionRepository.save(sub);
+            log.info("Subscription {} auto-renew set to {}", sub.getId(), autoRenew);
+            return sub;
+        });
+    }
+
     public void expire(Long subscriptionId) {
         Long userId;
         try {
